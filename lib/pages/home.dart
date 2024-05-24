@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _scratchKeys = <GlobalKey<ScratcherState>>[];
 
-  final int _total = 9;
+  final int _total = 12;
   int _complete = 0;
 
   @override
@@ -49,9 +49,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Scratch!'),
+        title: const Text('Scratch Lotto!'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         centerTitle: true,
+        actions: [
+           IconButton(
+              onPressed: () {
+                // random
+                resetGame();
+              },
+               icon: const Icon(Icons.refresh),
+            )
+        ],
       ),
       body: Center(
         child: Column(
@@ -98,14 +107,7 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
-            FilledButton.icon(
-              onPressed: () {
-                // random
-                resetGame();
-              },
-              label: const Text('Refresh'),
-              icon: const Icon(Icons.refresh),
-            )
+           
           ],
         ),
       ),
