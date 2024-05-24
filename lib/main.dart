@@ -1,8 +1,22 @@
+import 'dart:io';
+
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:scratch_ticket/pages/home.dart';
 
 void main() {
   runApp(const MyApp());
+
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    doWhenWindowReady(() {
+      const initialSize = Size(450, 800);
+      appWindow.maxSize = initialSize;
+      appWindow.minSize = initialSize;
+      appWindow.size = initialSize;
+      appWindow.alignment = Alignment.center;
+      appWindow.show();
+    });
+  }
 }
 
 class MyApp extends StatelessWidget {

@@ -9,10 +9,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final scratchKeys = <GlobalKey<ScratcherState>>[];
+  final _scratchKeys = <GlobalKey<ScratcherState>>[];
 
-  int total = 9;
-  int complete = 0;
+  final int _total = 9;
+  int _complete = 0;
 
   @override
   void initState() {
@@ -24,23 +24,23 @@ class _HomePageState extends State<HomePage> {
   // start game
   startGame() {
     // clear scratch key
-    scratchKeys.clear();
+    _scratchKeys.clear();
 
     // get scratch key
     List.generate(
-      total,
-      (index) => scratchKeys.add(GlobalKey<ScratcherState>()),
+      _total,
+      (index) => _scratchKeys.add(GlobalKey<ScratcherState>()),
     );
   }
 
   // reset game
   resetGame() {
     // complete
-    complete = 0;
+    _complete = 0;
     // rebuild
     List.generate(
-      total,
-      (index) => scratchKeys[index].currentState!.reset(
+      _total,
+      (index) => _scratchKeys[index].currentState!.reset(
             duration: const Duration(milliseconds: 5),
           ),
     );
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.all(8.0),
-              itemCount: total,
+              itemCount: _total,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 mainAxisSpacing: 4.0,
@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(12.0),
                   child: Scratcher(
-                    key: scratchKeys[index],
+                    key: _scratchKeys[index],
                     brushSize: 30,
                     threshold: 80,
                     color: Theme.of(context).colorScheme.primary,
@@ -88,9 +88,9 @@ class _HomePageState extends State<HomePage> {
                       );
                     }),
                     onThreshold: () {
-                      complete++;
+                      _complete++;
 
-                      if (complete == total) {
+                      if (_complete == _total) {
                         // check result
                         // show result dialog
                       }
