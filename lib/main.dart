@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:scratch_ticket/pages/home.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
@@ -13,7 +15,6 @@ void main() {
       appWindow.maxSize = initialSize;
       appWindow.minSize = initialSize;
       appWindow.size = initialSize;
-      appWindow.alignment = Alignment.center;
       appWindow.show();
     });
   }
