@@ -9,36 +9,105 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final scratchKeys = <GlobalKey<ScratcherState>>[];
+
+  int total = 9;
+  int complete = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    startGame();
+  }
+
+  // start game
+  startGame() {
+    // clear scratch key
+    scratchKeys.clear();
+
+    // get scratch key
+    List.generate(
+      total,
+      (index) => scratchKeys.add(GlobalKey<ScratcherState>()),
+    );
+  }
+
+  // reset game
+  resetGame() {
+    // complete
+    complete = 0;
+    // rebuild
+    List.generate(
+      total,
+      (index) => scratchKeys[index].currentState!.reset(
+            duration: const Duration(milliseconds: 5),
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(8.0),
-            itemCount: 9,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 4.0,
-              crossAxisSpacing: 4.0,
+      appBar: AppBar(
+        title: const Text('Scratch!'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(8.0),
+              itemCount: total,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 4.0,
+                crossAxisSpacing: 4.0,
+              ),
+              itemBuilder: (context, index) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: Scratcher(
+                    key: scratchKeys[index],
+                    brushSize: 50,
+                    threshold: 60,
+                    color: Theme.of(context).colorScheme.primary,
+                    child: LayoutBuilder(builder: (context, constraints) {
+                      return Container(
+                        height: constraints.maxWidth,
+                        width: constraints.maxWidth,
+                        color: Theme.of(context).colorScheme.primaryContainer,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset('assets/flutter.png'),
+                        ),
+                      );
+                    }),
+                    onThreshold: () {
+                      complete++;
+
+                      if (complete == total) {
+                        // check result
+                        // show result dialog
+                      }
+                    },
+                  ),
+                );
+              },
             ),
-            itemBuilder: (context, index) {
-              return Scratcher(
-                brushSize: 50,
-                threshold: 80,
-                color: Colors.red,
-                image: Image.asset('assets/scratch.png'),
-                child: Container(
-                  height: 300,
-                  width: 300,
-                  color: Colors.grey[100],
-                  child: Image.asset('assets/flutter.png'),
-                ),
-              );
-            },
-          ),
+            FilledButton.icon(
+              onPressed: () {
+                // random
+                resetGame();
+              },
+              label: const Text('Refresh'),
+              icon: const Icon(Icons.refresh),
+            )
+          ],
         ),
       ),
     );
