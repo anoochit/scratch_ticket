@@ -23,7 +23,8 @@ class _HomePageState extends State<HomePage> {
   final _scratchKeys = <GlobalKey<ScratcherState>>[];
 
   // Total number of scratchers
-  final int _total = 12;
+  int _total = 12;
+  int _cols = 3;
 
   final List<String> _icons = [
     'assets/google.png',
@@ -34,6 +35,8 @@ class _HomePageState extends State<HomePage> {
   static const _iconJoker = 'assets/joker.png';
 
   final List<String> _table = [];
+
+  String _mode = '3x4';
 
   @override
   void initState() {
@@ -73,8 +76,7 @@ class _HomePageState extends State<HomePage> {
 
   // Reset the game by resetting all scratchers and setting the completed count to 0
   void resetGame() {
-    // Reset the completed count
-
+    // Reset table
     buildTable();
 
     // Rebuild the scratchers to reset their state
@@ -86,6 +88,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  setTable({required String size}) {
+    _mode = size;
+    _cols = int.parse(size.split('x').first);
+    _total = int.parse(size.split('x').first) * int.parse(size.split('x').last);
+
+    setState(() {
+      startGame();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,6 +105,39 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Scratch!'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         centerTitle: true,
+        actions: [
+          TextButton(
+            onPressed: () {
+              showMenu(
+                context: context,
+                position: RelativeRect.fromLTRB(
+                    MediaQuery.sizeOf(context).width,
+                    kToolbarHeight - 24,
+                    0,
+                    0),
+                items: [
+                  PopupMenuItem<String>(
+                    value: '2x3',
+                    onTap: () => setTable(size: '2x3'),
+                    child: const Text('2x3'),
+                  ),
+                  PopupMenuItem<String>(
+                    value: '3x4',
+                    onTap: () => setTable(size: '3x4'),
+                    child: const Text('3x4'),
+                  ),
+                  PopupMenuItem<String>(
+                    value: '4x5',
+                    onTap: () => setTable(size: '4x5'),
+                    child: const Text('4x5'),
+                  )
+                ],
+                initialValue: _mode,
+              );
+            },
+            child: Text(_mode),
+          ),
+        ],
       ),
       body: Center(
         child: SizedBox(
@@ -105,8 +150,8 @@ class _HomePageState extends State<HomePage> {
                 physics: const NeverScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(8.0),
                 itemCount: _total,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: _cols,
                   mainAxisSpacing: 4.0,
                   crossAxisSpacing: 4.0,
                 ),
@@ -135,9 +180,9 @@ class _HomePageState extends State<HomePage> {
 
                         if (_table[index].contains('joker')) {
                           dev.log('Hahaha!!!');
-                          
+
                           showDialog(
-                             barrierDismissible: false,
+                            barrierDismissible: false,
                             context: context,
                             builder: (context) {
                               return AlertDialog(
