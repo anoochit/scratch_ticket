@@ -241,7 +241,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: const Text('Reset'),
+              child: const Text('Ok'),
             )
           ],
         );
@@ -267,7 +267,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: Text('Reset'),
+              child: const Text('Ok'),
             )
           ],
         );
