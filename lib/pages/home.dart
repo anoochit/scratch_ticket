@@ -1,9 +1,3 @@
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:3113354304.
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:1913141808.
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:3817003600.
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:3355681459.
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:1433212669.
-// Import necessary libraries
 import 'dart:async';
 import 'dart:math';
 import 'dart:developer' as dev;
@@ -111,39 +105,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Scratch!'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         centerTitle: true,
-        actions: [
-          TextButton(
-            onPressed: () {
-              showMenu(
-                context: context,
-                position: RelativeRect.fromLTRB(
-                    MediaQuery.sizeOf(context).width,
-                    kToolbarHeight - 24,
-                    0,
-                    0),
-                items: [
-                  PopupMenuItem<String>(
-                    value: '2x2',
-                    onTap: () => setTable(size: '2x2'),
-                    child: const Text('2x2'),
-                  ),
-                  PopupMenuItem<String>(
-                    value: '3x4',
-                    onTap: () => setTable(size: '3x4'),
-                    child: const Text('3x4'),
-                  ),
-                  PopupMenuItem<String>(
-                    value: '4x5',
-                    onTap: () => setTable(size: '4x5'),
-                    child: const Text('4x5'),
-                  )
-                ],
-                initialValue: _mode,
-              );
-            },
-            child: Text(_mode),
-          ),
-        ],
+        actions: popupMenuItems(context),
       ),
       body: Center(
         child: SizedBox(
@@ -162,90 +124,142 @@ class _HomePageState extends State<HomePage> {
                   crossAxisSpacing: 4.0,
                 ),
                 itemBuilder: (context, index) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Scratcher(
-                      key: _scratchKeys[index],
-                      brushSize: 50,
-                      threshold: 50,
-                      color: Theme.of(context).colorScheme.primary,
-                      child: LayoutBuilder(builder: (context, constraints) {
-                        return Container(
-                          height: constraints.maxWidth,
-                          width: constraints.maxWidth,
-                          color: Theme.of(context).colorScheme.primaryContainer,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Image.asset(_table[index]),
-                          ),
-                        );
-                      }),
-                      onThreshold: () {
-                        _scratchKeys[index].currentState!.reveal(
-                            duration: const Duration(milliseconds: 100));
-
-                        if (_table[index].contains('joker')) {
-                          dev.log('Hahaha!!!');
-
-                          showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Hahahaha'),
-                                content: const Text('You lose!'),
-                                actionsAlignment: MainAxisAlignment.center,
-                                actions: [
-                                  FilledButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        resetGame();
-                                        Navigator.pop(context);
-                                      });
-                                    },
-                                    child: const Text('Reset'),
-                                  )
-                                ],
-                              );
-                            },
-                          );
-                        } else {
-                          _complete++;
-
-                          if (_complete == _total) {
-                            showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: const Text('Wow!'),
-                                  content: const Text('You WIN!'),
-                                  actionsAlignment: MainAxisAlignment.center,
-                                  actions: [
-                                    FilledButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          resetGame();
-                                          Navigator.pop(context);
-                                        });
-                                      },
-                                      child: Text('Reset'),
-                                    )
-                                  ],
-                                );
-                              },
-                            );
-                          }
-                        }
-                      },
-                    ),
-                  );
+                  return scratchItem(index, context);
                 },
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  List<Widget> popupMenuItems(BuildContext context) {
+    return [
+      TextButton(
+        onPressed: () {
+          showMenu(
+            context: context,
+            position: RelativeRect.fromLTRB(
+                MediaQuery.sizeOf(context).width, kToolbarHeight - 24, 0, 0),
+            items: [
+              PopupMenuItem<String>(
+                value: '2x2',
+                onTap: () => setTable(size: '2x2'),
+                child: const Text('2x2'),
+              ),
+              PopupMenuItem<String>(
+                value: '3x4',
+                onTap: () => setTable(size: '3x4'),
+                child: const Text('3x4'),
+              ),
+              PopupMenuItem<String>(
+                value: '4x5',
+                onTap: () => setTable(size: '4x5'),
+                child: const Text('4x5'),
+              )
+            ],
+            initialValue: _mode,
+          );
+        },
+        child: Text(_mode),
+      ),
+    ];
+  }
+
+  ClipRRect scratchItem(int index, BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8.0),
+      child: Scratcher(
+        key: _scratchKeys[index],
+        brushSize: 50,
+        threshold: 50,
+        color: Theme.of(context).colorScheme.primary,
+        child: LayoutBuilder(builder: (context, constraints) {
+          return Container(
+            height: constraints.maxWidth,
+            width: constraints.maxWidth,
+            color: Theme.of(context).colorScheme.primaryContainer,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Image.asset(_table[index]),
+            ),
+          );
+        }),
+        onThreshold: () {
+          onThreshold(index, context);
+        },
+      ),
+    );
+  }
+
+  void onThreshold(int index, BuildContext context) {
+    _scratchKeys[index].currentState!.reveal(
+          duration: const Duration(
+            milliseconds: 100,
+          ),
+        );
+
+    if (_table[index].contains('joker')) {
+      dev.log('Hahaha!!!');
+
+      showHahahaDialog(context);
+    } else {
+      _complete++;
+
+      if (_complete == _total) {
+        showWowDialog(context);
+      }
+    }
+  }
+
+  Future<dynamic> showHahahaDialog(BuildContext context) {
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Hahahaha'),
+          content: const Text('You lose!'),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            FilledButton(
+              onPressed: () {
+                setState(() {
+                  resetGame();
+                  Navigator.pop(context);
+                });
+              },
+              child: const Text('Reset'),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Future<dynamic> showWowDialog(BuildContext context) {
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Wow!'),
+          content: const Text('You WIN!'),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            FilledButton(
+              onPressed: () {
+                setState(() {
+                  resetGame();
+                  Navigator.pop(context);
+                });
+              },
+              child: Text('Reset'),
+            )
+          ],
+        );
+      },
     );
   }
 }
