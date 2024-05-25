@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       // Set the title of the app
-      title: 'Flutter Demo',
+      title: 'Scratch!',
 
       // Set the light theme
       theme: ThemeData(
