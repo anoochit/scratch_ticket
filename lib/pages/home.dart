@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: BorderRadius.circular(8.0),
                     child: Scratcher(
                       key: _scratchKeys[index],
-                      brushSize: 30,
+                      brushSize: 50,
                       threshold: 30,
                       color: Theme.of(context).colorScheme.primary,
                       child: LayoutBuilder(builder: (context, constraints) {
