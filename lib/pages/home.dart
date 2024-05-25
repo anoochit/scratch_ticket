@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Scratch Lotto!'),
+        title: const Text('Scratch!'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         centerTitle: true,
       ),
@@ -114,11 +114,9 @@ class _HomePageState extends State<HomePage> {
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Scratcher(
-                      key: _scratchKeys[
-                          index], // Use the scratch key for this scratcher
-                      brushSize: 50,
+                      key: _scratchKeys[index],
+                      brushSize: 30,
                       threshold: 30,
-                      // image: Image.asset('assets/scratch.png'),
                       color: Theme.of(context).colorScheme.primary,
                       child: LayoutBuilder(builder: (context, constraints) {
                         return Container(
@@ -131,7 +129,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       }),
-
                       onThreshold: () {
                         _scratchKeys[index].currentState!.reveal(
                             duration: const Duration(milliseconds: 100));
