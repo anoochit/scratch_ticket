@@ -214,6 +214,7 @@ class _HomePageState extends State<HomePage> {
 
                           if (_complete == _total) {
                             showDialog(
+                              barrierDismissible: false,
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
