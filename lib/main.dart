@@ -20,7 +20,7 @@ void main() {
     // Wait until the window is ready
     doWhenWindowReady(() {
       // Set the initial size of the window
-      const initialSize = Size(450, 800);
+      const initialSize = Size(450, 680);
       appWindow.maxSize = initialSize;
       appWindow.minSize = initialSize;
       appWindow.size = initialSize;
