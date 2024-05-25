@@ -135,9 +135,9 @@ class _HomePageState extends State<HomePage> {
 
                         if (_table[index].contains('joker')) {
                           dev.log('Hahaha!!!');
-
+                          
                           showDialog(
-                            barrierDismissible: false,
+                             barrierDismissible: false,
                             context: context,
                             builder: (context) {
                               return AlertDialog(
