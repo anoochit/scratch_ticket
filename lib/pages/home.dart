@@ -267,7 +267,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: const Text('Reset'),
+              child: Text('Reset'),
             )
           ],
         );
