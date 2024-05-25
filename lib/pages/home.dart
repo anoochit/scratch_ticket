@@ -117,9 +117,9 @@ class _HomePageState extends State<HomePage> {
                     0),
                 items: [
                   PopupMenuItem<String>(
-                    value: '2x3',
-                    onTap: () => setTable(size: '2x3'),
-                    child: const Text('2x3'),
+                    value: '2x2',
+                    onTap: () => setTable(size: '2x2'),
+                    child: const Text('2x2'),
                   ),
                   PopupMenuItem<String>(
                     value: '3x4',
