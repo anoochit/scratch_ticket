@@ -4,6 +4,7 @@
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:3355681459.
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:1433212669.
 // Import necessary libraries
+import 'dart:async';
 import 'dart:math';
 import 'dart:developer' as dev;
 
@@ -37,6 +38,7 @@ class _HomePageState extends State<HomePage> {
   final List<String> _table = [];
 
   String _mode = '3x4';
+  int _complete = 0;
 
   @override
   void initState() {
@@ -46,6 +48,8 @@ class _HomePageState extends State<HomePage> {
 
   // Start the game by initializing the scratch keys
   void startGame() {
+    _complete = 0;
+
     buildTable();
 
     // Clear the existing scratch keys
@@ -76,6 +80,8 @@ class _HomePageState extends State<HomePage> {
 
   // Reset the game by resetting all scratchers and setting the completed count to 0
   void resetGame() {
+    _complete = 0;
+
     // Reset table
     buildTable();
 
@@ -161,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                     child: Scratcher(
                       key: _scratchKeys[index],
                       brushSize: 50,
-                      threshold: 30,
+                      threshold: 50,
                       color: Theme.of(context).colorScheme.primary,
                       child: LayoutBuilder(builder: (context, constraints) {
                         return Container(
@@ -203,6 +209,32 @@ class _HomePageState extends State<HomePage> {
                               );
                             },
                           );
+                        } else {
+                          _complete++;
+
+                          if (_complete == _total) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Wow!'),
+                                  content: const Text('You WIN!'),
+                                  actionsAlignment: MainAxisAlignment.center,
+                                  actions: [
+                                    FilledButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          resetGame();
+                                          Navigator.pop(context);
+                                        });
+                                      },
+                                      child: Text('Reset'),
+                                    )
+                                  ],
+                                );
+                              },
+                            );
+                          }
                         }
                       },
                     ),
