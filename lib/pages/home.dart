@@ -73,54 +73,57 @@ class _HomePageState extends State<HomePage> {
             )
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(8.0),
-              itemCount: _total,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 4.0,
-                crossAxisSpacing: 4.0,
+      body: Expanded(
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(8.0),
+                itemCount: _total,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 4.0,
+                  crossAxisSpacing: 4.0,
+                ),
+                itemBuilder: (context, index) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Scratcher(
+                      key: _scratchKeys[index], // Use the scratch key for this scratcher
+                      brushSize: 30,
+                      threshold: 80,
+                      // image: Image.asset('assets/scratch.png'),
+                      color: Theme.of(context).colorScheme.primary,
+                      child: LayoutBuilder(builder: (context, constraints) {
+                        return Container(
+                          height: constraints.maxWidth,
+                          width: constraints.maxWidth,
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset('assets/flutter.png'),
+                          ),
+                        );
+                      }),
+                      onThreshold: () {
+                        // Increment the completed count
+                        _complete++;
+          
+                        // Check if all scratchers are completed
+                        if (_complete == _total) {
+                          // Check the result and show a dialog
+                        }
+                      },
+                    ),
+                  );
+                },
               ),
-              itemBuilder: (context, index) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Scratcher(
-                    key: _scratchKeys[index], // Use the scratch key for this scratcher
-                    brushSize: 30,
-                    threshold: 80,
-                    color: Theme.of(context).colorScheme.primary,
-                    child: LayoutBuilder(builder: (context, constraints) {
-                      return Container(
-                        height: constraints.maxWidth,
-                        width: constraints.maxWidth,
-                        color: Theme.of(context).colorScheme.primaryContainer,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image.asset('assets/flutter.png'),
-                        ),
-                      );
-                    }),
-                    onThreshold: () {
-                      // Increment the completed count
-                      _complete++;
-
-                      // Check if all scratchers are completed
-                      if (_complete == _total) {
-                        // Check the result and show a dialog
-                      }
-                    },
-                  ),
-                );
-              },
-            ),
-           
-          ],
+             
+            ],
+          ),
         ),
       ),
     );
