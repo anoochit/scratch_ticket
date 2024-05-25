@@ -25,18 +25,15 @@ class _HomePageState extends State<HomePage> {
   // Total number of scratchers
   final int _total = 12;
 
-  // Number of completed scratchers
-  int _complete = 0;
-
   final List<String> _icons = [
     'assets/google.png',
     'assets/flutter.png',
     'assets/dart.png'
   ];
 
-  final _icon_joker = 'assets/joker.png';
+  static const _iconJoker = 'assets/joker.png';
 
-  List<String> _table = [];
+  final List<String> _table = [];
 
   @override
   void initState() {
@@ -65,7 +62,7 @@ class _HomePageState extends State<HomePage> {
       if (randomJoker()) {
         _table.add(_icons[iconIndex]);
       } else {
-        _table.add(_icon_joker);
+        _table.add(_iconJoker);
       }
     }
   }
@@ -77,7 +74,6 @@ class _HomePageState extends State<HomePage> {
   // Reset the game by resetting all scratchers and setting the completed count to 0
   void resetGame() {
     // Reset the completed count
-    _complete = 0;
 
     buildTable();
 
@@ -137,9 +133,6 @@ class _HomePageState extends State<HomePage> {
                       }),
 
                       onThreshold: () {
-                        // Increment the completed count
-                        _complete++;
-
                         _scratchKeys[index].currentState!.reveal(
                             duration: const Duration(milliseconds: 100));
 
@@ -151,8 +144,8 @@ class _HomePageState extends State<HomePage> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text('Hahahaha'),
-                                content: Text('You lose!'),
+                                title: const Text('Hahahaha'),
+                                content: const Text('You lose!'),
                                 actionsAlignment: MainAxisAlignment.center,
                                 actions: [
                                   FilledButton(
@@ -162,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                                         Navigator.pop(context);
                                       });
                                     },
-                                    child: Text('Reset'),
+                                    child: const Text('Reset'),
                                   )
                                 ],
                               );
