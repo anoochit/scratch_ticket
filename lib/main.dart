@@ -1,6 +1,3 @@
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:3066121167.
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:2706768098.
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:991234137.
 // Import necessary libraries
 import 'dart:io';
 
