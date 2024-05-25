@@ -21,30 +21,34 @@ class _HomePageState extends State<HomePage> {
   int _total = 12;
   int _cols = 3;
 
+  // List of icons for the scratchers
   final List<String> _icons = [
     'assets/google.png',
     'assets/flutter.png',
     'assets/dart.png'
   ];
 
+  // Joker icon path
   static const _iconJoker = 'assets/joker.png';
 
+  // Table to store the icons for each scratcher
   final List<String> _table = [];
 
+  // Game mode and completed scratchers count
   String _mode = '3x4';
   int _complete = 0;
 
   @override
   void initState() {
     super.initState();
-    startGame();
+    startGame(); // Initialize the game
   }
 
   // Start the game by initializing the scratch keys
   void startGame() {
     _complete = 0;
 
-    buildTable();
+    buildTable(); // Build the initial table
 
     // Clear the existing scratch keys
     _scratchKeys.clear();
@@ -56,7 +60,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  buildTable() {
+  // Build the table with icons and jokers
+  void buildTable() {
     final iconIndex = Random().nextInt(3);
     _table.clear();
     for (int i = 0; i < _total; i++) {
@@ -68,6 +73,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // Determine if a joker should be added
   bool randomJoker() {
     return Random().nextBool();
   }
@@ -88,7 +94,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  setTable({required String size}) {
+  // Set the table size and start a new game
+  void setTable({required String size}) {
     _mode = size;
     _cols = int.parse(size.split('x').first);
     _total = int.parse(size.split('x').first) * int.parse(size.split('x').last);
@@ -134,6 +141,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // Create popup menu items for changing the table size
   List<Widget> popupMenuItems(BuildContext context) {
     return [
       TextButton(
@@ -167,6 +175,7 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
+  // Create a scratcher item for the grid
   ClipRRect scratchItem(int index, BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
@@ -193,6 +202,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // Handle the threshold event when a scratcher is revealed
   void onThreshold(int index, BuildContext context) {
     _scratchKeys[index].currentState!.reveal(
           duration: const Duration(
@@ -203,16 +213,17 @@ class _HomePageState extends State<HomePage> {
     if (_table[index].contains('joker')) {
       dev.log('Hahaha!!!');
 
-      showHahahaDialog(context);
+      showHahahaDialog(context); // Show losing dialog
     } else {
       _complete++;
 
       if (_complete == _total) {
-        showWowDialog(context);
+        showWowDialog(context); // Show winning dialog
       }
     }
   }
 
+  // Show a dialog when the player loses
   Future<dynamic> showHahahaDialog(BuildContext context) {
     return showDialog(
       barrierDismissible: false,
@@ -238,6 +249,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // Show a dialog when the player wins
   Future<dynamic> showWowDialog(BuildContext context) {
     return showDialog(
       barrierDismissible: false,
@@ -255,7 +267,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: Text('Reset'),
+              child: const Text('Reset'),
             )
           ],
         );
